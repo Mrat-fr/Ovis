@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 import './Home.css';
 
 export default function Home() {
@@ -22,9 +23,16 @@ export default function Home() {
         URL.revokeObjectURL(image);
     };
 
+    const UploadToServer = () => {
+      axios.post('http://localhost:4000/image-upload', selectedImages)
+      .then(res => {
+        console.log('Axios response: ', res)
+      })
+    }
+
     return (
    <>
-   <img src={require('../componets/MainLogo.png')} width="700" height="300" alt='Logo' />
+   <img src={require('../componets/MainLogo.png')} width="870" height="300" alt='Logo' />
    <section>
     <label>
         + Add Images
@@ -32,6 +40,7 @@ export default function Home() {
         <span>up to 10 images</span>
         <input type="file" name="images" onChange={onSelectFile} multiple accept="image/png , image/jpeg, image/webp" />
     </label>
+
       <br />
 
       <input type="file" multiple />
@@ -45,12 +54,7 @@ export default function Home() {
             </span>
           </p>
         ) : (
-          <button
-            className="upload-btn"
-            onClick={() => {
-              console.log(selectedImages);
-            }}
-          >
+          <button className="upload-btn" onClick={UploadToServer}>
             UPLOAD {selectedImages.length} IMAGE
             {selectedImages.length === 1 ? "" : "S"}
           </button>
@@ -73,5 +77,4 @@ export default function Home() {
     </section>
         </>
     )
-
 }
